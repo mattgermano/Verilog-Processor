@@ -3,6 +3,7 @@ module decoder_m(
 	output reg Reg2Loc, Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, output reg[1:0] ALUOp,  
 	input[31:0] instruction);
 
+	//Run whenever the value of instruction changes
 	always@(instruction) begin
 		//B and BL
 		if(instruction[30:26] == 5'b00101) begin
