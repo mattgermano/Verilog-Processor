@@ -16,7 +16,6 @@ module test();
 	decoder_m decoder(register1, register2, writeRegister, immediate, Reg2Loc,
 			Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, ALUOp, instruction);
 
-		//Create a waveform file
 		initial begin
 			$dumpfile("waveform.vcd");
 			$dumpvars(0, test);
@@ -24,19 +23,18 @@ module test();
 
 	initial begin
         $monitor("instruction: %b", instruction,
-                 "\tregister1: %b", register1,
-                 "\tregister2: %b", register2,
-                 "\twrite_register: %b", writeRegister,
-                 "\timmediate: %d", immediate,
-                 "\tUnconbranch: %b", Uncondbranch,
-                 "\tbranch: %b", Branch,
-                 "\tMemRead: %b", MemRead,
-                 "\tMemWrite: %b", MemWrite,
-                 "\tMemToReg: %b", MemtoReg,
-                 "\tALUSrc: %b", ALUSrc,
-                 "\tRegWrite: %b", RegWrite,
-				 "\tALUOp: %b", ALUOp
-                 ); 
+			"\tregister1: %b", register1,
+			"\tregister2: %b", register2,
+			"\twrite_register: %b", writeRegister,
+			"\timmediate: %d", immediate,
+			"\tUnconbranch: %b", Uncondbranch,
+			"\tbranch: %b", Branch,
+			"\tMemRead: %b", MemRead,
+			"\tMemWrite: %b", MemWrite,
+			"\tMemToReg: %b", MemtoReg,
+			"\tALUSrc: %b", ALUSrc,
+			"\tRegWrite: %b", RegWrite,
+			"\tALUOp: %b", ALUOp); 
     end
 
 	initial begin
