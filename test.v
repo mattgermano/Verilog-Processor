@@ -30,20 +30,22 @@ module test();
 	end
 
 	initial begin
-		//instruction = 1001000100_000010000000_11111_00000
-		instruction = 32'h910203E0;//ADDI X0,XZR, #128
-		//instruction = 100100_01000000100000001111100000
-		#2 instruction = 32'h14001101; //B #16909280
-		//instruction = 111010_0000100000001000000000001
-		#2 instruction = 32'h74101001; // BL #1052673
+		//instruction = 000101_01000000100000001111100000
+		instruction = 32'h150203E0; //B #16909280
+		//instruction = 100101_00001000000010000000000010
+		#2 instruction = 32'h94202002; // BL #2105346
 		//instruction = 10110100_0010110100111001010_00101
 		#2 instruction = 32'hB42D3945; //CBZ X5, #92618
+		//instruction = 10110101_0010110100111001010_00011
+		#2 instruction = 32'hB52D3943; //CBZ X3, #92618
 		//instruction = 10001010000_00100_000000_00010_00001
 		#2 instruction = 32'h8A040041; //AND X1, X2, X4 
 		//instruction = 11111000000_001001000_00_00010_00100  
 		#2 instruction = 32'hF8048044; //STR X4, [X2, #72]
 		//instruction = 11111000010_001100010_00_00011_00000
 		#2 instruction = 32'hF8462060; //LDR X0, [X3, #98]
+		//instruction = 1001000100_000010000000_11111_00000
+		#2 instruction = 32'h910203E0; //ADDI X0, XZR, #128
 		//instruction = 111100101_13 bits_00111_00010 
 		#2 instruction = 32'hF28000E2; //MOVE X2, X7
 	end

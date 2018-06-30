@@ -3,7 +3,6 @@ module decoder_m(
 	output reg Reg2Loc, Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, output reg[1:0] ALUOp,  
 	input[31:0] instruction);
 
-	//Run whenever the value of instruction changes
 	always@(instruction) begin
 		//B and BL
 		if(instruction[30:26] == 5'b00101) begin
@@ -15,16 +14,19 @@ module decoder_m(
 			Reg2Loc = 1; Uncondbranch = 0; Branch = 1; MemRead = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ALUOp = 2'b01;
 			register2 = instruction[4:0]; immediate = instruction[23:5];
 		end
-		//Load and Store
+		//LDUR and STUR
 		else if(instruction[31:23] == 9'b111110000 && instruction[21] == 0) begin
+			Uncondbranch = 0; Branch = 0; ALUSrc = 1; ALUOp = 2'b00;
+			register1 = instruction[9:5]; immediate = instruction[20:12];
+
 			if(instruction[22] == 1) begin //Load
-				Uncondbranch = 0; Branch = 0; MemRead = 1; MemWrite = 0; MemtoReg = 1; ALUSrc = 1; RegWrite = 1; ALUOp = 2'b00;
-				writeRegister = instruction[4:0]; register1 = instruction[9:5]; immediate = instruction[21:12];
+				MemRead = 1; MemWrite = 0; MemtoReg = 1; RegWrite = 1;
+				writeRegister = instruction[4:0];
 			end
 
 			else begin //Store
-				Reg2Loc = 1; Uncondbranch = 0; Branch = 0; MemRead = 0; MemWrite = 1; ALUSrc = 1; RegWrite = 0; ALUOp = 2'b00;
-				register1 = instruction[9:5]; register2 = instruction[4:0]; immediate = instruction[21:12];
+				Reg2Loc = 1; MemRead = 0; MemWrite = 1; RegWrite = 0;
+				register2 = instruction[4:0]; 
 			end
 		end
 		//R-Type
@@ -41,8 +43,8 @@ module decoder_m(
 				immediate = instruction[21:10]; writeRegister = instruction[4:0]; register1 = instruction[9:5];
 			end
 		end
-
-		else if(instruction[31:23] == 9'b111100101) begin //MOV
+		//MOVK
+		else if(instruction[31:23] == 9'b111100101) begin
 			register1 = instruction[9:5]; writeRegister = instruction[4:0];
 			Uncondbranch = 0; Branch = 0; MemRead = 0; MemWrite = 0; MemtoReg = 1; RegWrite = 1;
 		end
