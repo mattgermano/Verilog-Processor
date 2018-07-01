@@ -27,6 +27,7 @@ module test();
 			"\tregister2: %b", register2,
 			"\twrite_register: %b", writeRegister,
 			"\timmediate: %d", immediate,
+			"\tReg2Loc: %b", Reg2Loc,
 			"\tUnconbranch: %b", Uncondbranch,
 			"\tbranch: %b", Branch,
 			"\tMemRead: %b", MemRead,
