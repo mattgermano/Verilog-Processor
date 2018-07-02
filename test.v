@@ -16,6 +16,7 @@ module test();
 	decoder_m decoder(register1, register2, writeRegister, immediate, Reg2Loc,
 			Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, ALUOp, instruction);
 
+		//Create a waveform file
 		initial begin
 			$dumpfile("waveform.vcd");
 			$dumpvars(0, test);
