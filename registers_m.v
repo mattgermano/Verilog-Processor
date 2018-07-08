@@ -6,7 +6,6 @@ module registers_m(
 	reg[31:0] register_memory [31:0];//creates an array that holds 32 32-bit registers and initializes them to 0
 	integer i;
 	initial begin
-		$display("klsdjfsdklfj");
 		for (i = 0; i < 32; i = i + 1) begin 
 			register_memory[i] <= 32'b0; 
 		end
@@ -14,7 +13,7 @@ module registers_m(
 
 	always@* begin
 	data1 = register_memory[(register1)];
-	writeDataMem = register_memory[register2];
+	writeDataMem = register_memory[register2];//This is the data that is written to the data memory
 		if(ALUSrc == 0) begin //Logic for the mux that chooses data2
 			data2 = register_memory[(register2)];
 		end else begin
