@@ -2,6 +2,8 @@
 `include "registers_m.v"
 `include "ALU_m.v"
 `include "ALUControl_m.v"
+`include "dataMemory_m.v"
+`include "multiplexer_m.v"
 `timescale 1ns / 1ps
 
 module test();
@@ -9,8 +11,6 @@ module test();
 	//Inputs
 	//Decoder
 	reg[31:0] instruction;
-	//Registers
-	reg[31:0] writeData;
 
 	//Outputs
 	//Decoder
@@ -20,6 +20,8 @@ module test();
 	wire signed[31:0] immediate;
 	//Registers
 	wire[31:0] data1, data2;
+	wire[31:0] writeData;
+	wire[31:0] writeDataMem;
 
 	//ALUControl
 	wire [3:0] aluControl;
@@ -28,18 +30,27 @@ module test();
 	wire[31:0] aluResult;
 	wire overflow, zeroflag;
 
+	//dataMemory
+	wire[31:0] readData;
+
 	//Instantiate an object from the decoder class
 	decoder_m decoder(register1, register2, writeRegister, immediate, Reg2Loc,
 			Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, ALUOp, instruction);
 
 	//Instantiate an object from the register class
-	registers_m register(data1, data2, writeData, register1, register2, writeRegister, immediate, RegWrite, ALUSrc);
+	registers_m register(data1, data2, writeDataMem, writeData, register1, register2, writeRegister, immediate, RegWrite, ALUSrc);
 
 	//Instantiate an object from teh ALUControl class
 	ALUControl_m ALUControl(aluControl, instruction, ALUOp);
 
 	//Instantiate an object from the ALU class
 	ALU_m alu(aluResult, overflow, zeroflag, aluControl, data1, data2);
+
+	//Instantiate an object from the dataMemory class
+	dataMemory_m dataMemory(readData, aluResult, writeDataMem, MemWrite, MemRead);
+
+	//Instantiate an object from the multiplexor class
+	multiplexer_m multiplexer(writeData, readData, aluResult, MemtoReg);
 
 	//Create a waveform file
 	initial begin
@@ -68,15 +79,30 @@ module test();
 			//for registers
 			"\tdata1 :%b", data1,
 			"\tdata2 :%b", data2,
-
+			"\twriteDataMem :%b", writeDataMem,
 			//for ALU
 			"\taluControl: %b", aluControl,
 			"\toverflow: %b", overflow, 
 			"\taluResult: %b", aluResult,
-			"\tzeroFlag: %b", zeroflag);
-			
+			"\tzeroFlag: %b", zeroflag,
+			//for dataMemory
+			"\treadData: %b", readData,
+			//for Multiplexer
+			"\twriteData: %b", writeData);
     end
 
+	//test cases to test data memory and register memory
+	initial begin
+		//instruction = 1001000100_000000001000_00001_00001;
+		instruction = 'h91002021; //ADDI X1, X1, #8
+		//instruction = 11111000000_000000000_00_00010_00001; 
+		#2 instruction = 'hF8000041; //STR X1, [X2, #0];
+		//instruction = 11111000010_000000000_00_00010_00011;
+		#2 instruction = 'hF8400043; //LDR X3, [X2, #0];
+		//instruction = 1101000100_000000000111_00011_00011;
+		#2 instruction = 'hD1001C63; //SUBI X3, X3, #7;
+	end
+	/**
 	initial begin
 		//instruction = 000101_11111111111111111111111111
 		instruction = 32'h17FFFFFF; //B #-1
@@ -97,13 +123,13 @@ module test();
 		//instruction = 111100101_13 bits_00111_00010 
 		#2 instruction = 32'hF28000E2; //MOVE X2, X7
 	end
-
-	/** Test cases from project assignment
+	**/
+	/**Test cases from project assignment
 	initial begin
 		//instruction = 11111000010_000000000_00_10100_00001;
 		instruction = 'hF8400281; // LDR X1, [X20, #0]
 		//instruction = 10001011000_00001_000000_00001_00010;
-		#2 instruction = 'h8B010022; ADD X2, X1, X1;
+		#2 instruction = 'h8B010022; //ADD X2, X1, X1;
 		//instruction = 1101000100_000000000000_11001_10011;
 		#2 instruction = 'hD1000333; //SUBI X19, X25, #0
 		//instruction = 10110100_0000000000000000111_00011;
