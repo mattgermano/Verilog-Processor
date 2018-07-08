@@ -43,15 +43,13 @@ module decoder_m(
 			if((~instruction[29] & ~instruction[25] & instruction[24]) | (~instruction[30] & instruction[25] & ~instruction[24]) | (~instruction[29] & instruction[25] & ~instruction[24])) begin
 				Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; MemtoReg <= 0; ALUSrc <= 1; RegWrite <= 1; ALUOp <= 2'b10; //Set control signals
 				writeRegister <= instruction[4:0]; register1 <= instruction[9:5]; //Set register locations
-				immediate[31:0] <= (instruction[21] == 1) ? {{20{instruction[21]}}, instruction[21:10]} : instruction[21:10]; //Sign-extension of the immediate if there is a leading 1
-				
+				immediate[31:0] <= (instruction[21] == 1) ? {{20{instruction[21]}}, instruction[21:10]} : instruction[21:10]; //Sign-extension of the immediate if there is a leading 1	
 			end
 		end
 		//MOVK
 		else if(instruction[31:23] == 9'b111100101) begin
 			Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; MemtoReg <= 1; RegWrite <= 1; //Set control signals
-			register1 <= instruction[9:5]; writeRegister <= instruction[4:0]; //Set register locations
-			
+			register1 <= instruction[9:5]; writeRegister <= instruction[4:0]; ALUOp <= 2'b01; //Set register locations
 		end
 	end
 endmodule

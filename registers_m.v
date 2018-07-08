@@ -1,6 +1,6 @@
 module registers_m(
-	output reg [31:0] data1, output reg[31:0] data2,
-	input [31:0] writeData, input[4:0] register1, input[4:0] register2, input[4:0] writeRegister, input[31:0]immediate, input RegWrite, input ALUSrc);
+	output reg signed[31:0] data1, output reg signed[31:0] data2,
+	input [31:0] writeData, input[4:0] register1, input[4:0] register2, input[4:0] writeRegister, input signed[31:0]immediate, input RegWrite, input ALUSrc);
 
 	reg[31:0] register_memory [31:0];//creates an array that holds 32 32-bit registers and initializes them to 0
 	integer i;

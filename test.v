@@ -1,5 +1,7 @@
 `include "decoder_m.v"
 `include "registers_m.v"
+`include "ALU_m.v"
+`include "ALUControl_m.v"
 `timescale 1ns / 1ps
 
 module test();
@@ -7,7 +9,6 @@ module test();
 	//Inputs
 	//Decoder
 	reg[31:0] instruction;
-
 	//Registers
 	reg[31:0] writeData;
 
@@ -17,9 +18,15 @@ module test();
 	wire [1:0] ALUOp;
 	wire [4:0] register1, register2, writeRegister;
 	wire signed[31:0] immediate;
-
 	//Registers
 	wire[31:0] data1, data2;
+
+	//ALUControl
+	wire [3:0] aluControl;
+
+	//ALU
+	wire[31:0] aluResult;
+	wire overflow, zeroflag;
 
 	//Instantiate an object from the decoder class
 	decoder_m decoder(register1, register2, writeRegister, immediate, Reg2Loc,
@@ -27,6 +34,12 @@ module test();
 
 	//Instantiate an object from the register class
 	registers_m register(data1, data2, writeData, register1, register2, writeRegister, immediate, RegWrite, ALUSrc);
+
+	//Instantiate an object from teh ALUControl class
+	ALUControl_m ALUControl(aluControl, instruction, ALUOp);
+
+	//Instantiate an object from the ALU class
+	ALU_m alu(aluResult, overflow, zeroflag, aluControl, data1, data2);
 
 	//Create a waveform file
 	initial begin
@@ -36,7 +49,9 @@ module test();
 
 	//monitors variables
 	initial begin
-        $monitor("instruction: %b", instruction,
+        $monitor(
+			//for decoder
+			"instruction: %b", instruction,
 			"\tregister1: %b", register1,
 			"\tregister2: %b", register2,
 			"\twrite_register: %b", writeRegister,
@@ -50,8 +65,16 @@ module test();
 			"\tALUSrc: %b", ALUSrc,
 			"\tRegWrite: %b", RegWrite,
 			"\tALUOp: %b", ALUOp,
+			//for registers
 			"\tdata1 :%b", data1,
-			"\tdata2 :%b", data2); 
+			"\tdata2 :%b", data2,
+
+			//for ALU
+			"\taluControl: %b", aluControl,
+			"\toverflow: %b", overflow, 
+			"\taluResult: %b", aluResult,
+			"\tzeroFlag: %b", zeroflag);
+			
     end
 
 	initial begin
