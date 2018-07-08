@@ -51,5 +51,9 @@ module decoder_m(
 			Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; MemtoReg <= 1; RegWrite <= 1; //Set control signals
 			register1 <= instruction[9:5]; writeRegister <= instruction[4:0]; ALUOp <= 2'b01; //Set register locations
 		end
+		//NO-OP
+		else begin
+			Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; RegWrite <= 0;
+		end
 	end
 endmodule
