@@ -18,7 +18,7 @@ module registers_m(
 			data2 <= immediate;
 		end
 		if(RegWrite == 1) begin //if RegWrite is active
-			if(writeRegister != 0) begin //makes sure to not write to XZR
+			if(writeRegister != 31) begin //makes sure to not write to XZR
 				register_memory[(writeRegister)] = writeData;
 			end
 		end
