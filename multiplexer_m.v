@@ -1,10 +1,13 @@
 module multiplexer_m(
-	output reg[31:0] multiplexerOutput, 
-	input[31:0] input1, input[31:0] input2, input select);
+	output reg signed[31:0] multiplexerOutput, 
+	input signed[31:0] input1, input signed[31:0] input2, input select);
 
-	always@(input1 or input2 or select) begin
-		multiplexerOutput = (~select & input1) | (select & input2);
-
+	always@* begin
+		//multiplexerOutput <= (~select & input2) | (select & input1);
+		if(select == 1) begin
+			multiplexerOutput <= input1;
+		end else begin
+			multiplexerOutput <= input2;
+		end
 	end
-
 endmodule
