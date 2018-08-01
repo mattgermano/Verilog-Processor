@@ -19,12 +19,13 @@ module dataMemory_m(
 	integer j; // used to loop through the bits in the memory
 	initial begin
 		for(i = 0; i < 1024; i = i + 1) begin
-			setAddress[i] <= 0;
-			setData[i] <= 0;
+			setAddress[i] <= 31'bx;
+			setData[i] <= 32'bx;
 		end // for
 	end // initial begin
 
-	always@(MemWrite || MemRead) begin
+	always@(MemWrite == 1 || MemRead == 1) begin
+		#1
 		if (setAddress[blockID] == blockAddress) begin // address is in the cache
 			if (MemRead) begin // Read data from the address
 				if (byteOffset != 0 ) begin // if there is a byte offset
@@ -47,11 +48,12 @@ module dataMemory_m(
 			end // else if
 		end //if
 		else begin // address is not in the cache
-			setAddress[blockID] = blockAddress;
 			if (MemWrite) begin
+				setAddress[blockID] = blockAddress;
 				setData[blockID] = writeDataMem;
 			end // if
 			else if(MemRead) begin
+				setAddress[blockID] = blockAddress;
 				readData = 32'bx;
 			end // else if
 		end // else

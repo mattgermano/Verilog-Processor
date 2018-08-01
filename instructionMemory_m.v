@@ -34,10 +34,10 @@ module instructionMemory_m(
 		instruction_memory[3] <= 'hB40000E3; //CBZ X3, #7
 		//instruction = 1001000100_000000001000_10100_10100;
 		instruction_memory[10] <= 'h91002294; //ADDI X20, X20, #8
-		//instruction = 11111000000_111110100_00_10100_00001;
-		instruction_memory[11] <= 'hF81F4281; //X1, [X20, #-12]
-		//instruction = 000101_11111111111111111111111010;
-		instruction_memory[12] <= 'h17FFFFFA; //B , #-6
+		//instruction = 11111000000_000000000_00_10100_00001;
+		instruction_memory[11] <= 'b11111000000_000000000_00_10100_10100; //STR X20, [X20, #0]
+		//instruction = 000101_11111111111111111111110100;
+		instruction_memory[12] <= 'b000101_11111111111111111111110100; //B , #-12
 
 		//More test cases
 		/**
