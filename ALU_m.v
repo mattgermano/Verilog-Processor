@@ -1,3 +1,9 @@
+/*
+ * Arithmetic Logic Unit. Takes in the aluControl in order to determine which mathematical operation to carry out
+ * and returns the resultant of the calculation. If the ALUControl could not be mapped then outputs x's. 
+ */
+
+
 module ALU_m(
 	output reg signed[31:0] aluResult, output reg overflow, output reg zeroFlag, 
 	input[3:0] aluControl, input signed[31:0] data1, input signed[31:0] data2);
@@ -14,7 +20,7 @@ module ALU_m(
 		4'b1001:	aluResult <= data1 ^ data2;			 		//EOR
 		4'b0101:	aluResult <= ~(data1 | data2);				//NOR
 		4'b1100:	aluResult <= ~(data1 & data2); 				//NAND
-		4'b1101:	aluResult <= data2;					 		//MOV
+		4'b1101:	aluResult <= data1;					 		//MOV
 		default: 	aluResult <= 32'bx;	 						//Default case
 
 		endcase
