@@ -1,10 +1,15 @@
+/*
+* This cache is a 1024 line direct-map each line with 1 block and 
+* there are only 32 bits for the data so we have the following:
+* Index = 0, Block Offset = 0 bit. Tag = 32 - 0 - 0 = 32.
+* If there is a miss when reading the data returned is x.
+*/
 module dataMemory_m(
 	output reg signed[31:0] readData,
 	input signed[31:0] aluResult, input signed[31:0] writeDataMem, input MemWrite, input MemRead);
-
 	reg[30:0] setAddress [0:1023];
 	reg[31:0] setData [0:1023];
-
+	
 	wire [31:0] blockAddress = aluResult;
 	wire [9:0] blockID  = blockAddress % 1024;
 

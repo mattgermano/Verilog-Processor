@@ -1,3 +1,7 @@
+/*
+ * Takes in the instruction and ALUOp and translate it into a aluControl used to
+ * tell the ALU which mathematical operation to carry out.
+ */ 
 module ALUControl_m(
     output reg [3:0] aluControl,
     input[31:0] instruction, input[1:0]ALUOp);
@@ -27,8 +31,8 @@ module ALUControl_m(
         13'b0110110101xxx: aluControl <= 4'b1111;//CBNZ instruction CBNZ aluControl
 
         //M-Type
-        13'b01111100101x: aluControl <= 4'b1101;//MOVE instruction MOVE aluControl
-        default: aluControl <= 4'b0000;
+        13'b01111100101xx: aluControl <= 4'b1101;//MOVE instruction MOVE aluControl
+        default: aluControl <= 4'b0000; //Unknown ALUOp and instruction combination
         endcase
     end
 endmodule

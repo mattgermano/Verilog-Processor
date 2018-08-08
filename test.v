@@ -1,3 +1,7 @@
+/*
+ * Testbench for a verilog data path. All modules are instantiated and variables declared. 
+ */
+
 `include "decoder_m.v"
 `include "registers_m.v"
 `include "ALU_m.v"
@@ -15,11 +19,12 @@ module test();
 	wire [4:0] register1, register2, writeRegister; //Registers
 	wire signed[31:0] data1, data2, immediate; //Data from Registers/Immediate
 	wire [3:0] aluControl; //ALU Control
-	wire[31:0] aluResult; wire overflow, zeroflag;//ALU output
+	wire signed[31:0] aluResult; //result of the ALU
+	wire overflow, zeroflag;//ALU output
 	
-	wire[31:0] writeData;//The data to be written back to the registers
-	wire[31:0] writeDataMem;//The data to be written to the data module
-	wire[31:0] readData;//The output from the data module that goes into the RegWrite ux
+	wire signed [31:0] writeData;//The data to be written back to the registers
+	wire signed [31:0] writeDataMem;//The data to be written to the data module
+	wire signed [31:0] readData;//The output from the data module that goes into the RegWrite ux
 
 	reg clock;
 
@@ -57,18 +62,19 @@ module test();
 
 	//monitors variables
 	initial begin
-        $monitor(
+		$monitor(
 			"instruction: %b", instruction, "\tPC: %d", PC, 
 			"\nReg2Loc: %b", Reg2Loc, "\tUnconbranch: %b", Uncondbranch,"\tbranch: %b", Branch,"\tMemRead: %b", MemRead,"\tMemWrite: %b", MemWrite,"\tMemToReg: %b", MemtoReg,"\tALUSrc: %b", ALUSrc,
 			"\tRegWrite: %b", RegWrite,"\tALUOp: %b", ALUOp,
-			"\nregister1: %d", register1, "\tdata1 :%d", data1, "\tregister2: %d", register2, "\tdata2 :%d", data2, "\timmediate: %d", immediate,"\twrite_register: %d", writeRegister,
-			"\naluControl: %b", aluControl,"\toverflow: %d", overflow, "\taluResult: %d", aluResult,"\tzeroFlag: %b", zeroflag,"\twriteDataMem :%d", writeDataMem,
+			"\tregister1: %d", register1, "\tdata1 :%d", data1, "\tregister2: %d", register2, "\ndata2 :%d", data2, "\timmediate: %d", immediate,"\twrite_register: %d", writeRegister,
+			"\taluControl: %b", aluControl,"\toverflow: %d", overflow, "\taluResult: %d", aluResult,"\tzeroFlag: %b", zeroflag,"\twriteDataMem :%d", writeDataMem,
 			"\nreadData: %d", readData,"\twriteData: %d", writeData, "\n");
     end
 
+	//declares clock variable
 	initial begin				
 		clock = 0;		
-		repeat(6) begin 
+		repeat(100) begin 
 			#1 clock = ~clock;
 		end
 	end

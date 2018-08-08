@@ -1,3 +1,7 @@
+/*
+ * Takes in an instruction and parses out the control bits and immediate based on patterns.
+ * Also sign extends the immediate to 32 bits. 
+ */
 module decoder_m(
 	output reg[4:0] register1, output reg[4:0] register2, output reg[4:0] writeRegister, output reg signed[31:0] immediate,  
 	output reg Reg2Loc, Uncondbranch, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, output reg[1:0] ALUOp,  
@@ -48,7 +52,7 @@ module decoder_m(
 		end
 		//MOVK
 		else if(instruction[31:23] == 9'b111100101) begin
-			Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; MemtoReg <= 1; RegWrite <= 1; //Set control signals
+			Uncondbranch <= 0; Branch <= 0; MemRead <= 0; MemWrite <= 0; MemtoReg <= 0; RegWrite <= 1; //Set control signals
 			register1 <= instruction[9:5]; writeRegister <= instruction[4:0]; ALUOp <= 2'b01; //Set register locations
 		end
 		//NO-OP

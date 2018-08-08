@@ -5,13 +5,13 @@ module PC_m(
 	initial begin
 		PC <= 0;
 	end
+
 	always@(posedge clock) begin
 		if((Uncondbranch | (zeroFlag & Branch)) == 1) begin
 			PC <= PC + (immediate << 2);
-		end
-
+		end // if 
 		else begin
 			PC <= PC + 4;
-		end
-	end
+		end // else
+	end // always
 endmodule
